@@ -20,6 +20,7 @@ import { IntlTranslationsProvider, ITranslationsComponentProps } from './Transla
 import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
 import { getVisualizationOptions } from '../../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../../helpers/errorHandlers';
+import fixEmptyHeaderItems from './utils/fixEmptyHeaderItems';
 
 export interface ILegendConfig {
     enabled?: boolean;
@@ -168,7 +169,9 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
                                     resultSpec: this.props.resultSpec
                                 }}
                                 executionResponse={executionResponse.executionResponse}
-                                executionResult={executionResult.executionResult}
+                                executionResult={
+                                    fixEmptyHeaderItems(executionResult, props.emptyHeaderString).executionResult
+                                }
                                 height={height}
                                 config={{
                                     ...config,

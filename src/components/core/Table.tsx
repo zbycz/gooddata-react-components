@@ -19,6 +19,8 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
 
 import { IntlWrapper } from './base/IntlWrapper';
+import { IntlTranslationsProvider, ITranslationsComponentProps } from './base/TranslationsProvider';
+import fixEmptyHeaderItems from './base/utils/fixEmptyHeaderItems';
 import { IEvents, ILoadingState } from '../../interfaces/Events';
 import { IDrillableItem } from '../../interfaces/DrillEvents';
 import { IVisualizationProperties } from '../../interfaces/VisualizationProperties';
@@ -233,21 +235,27 @@ export class Table extends React.Component<ITableProps, ITableState> {
         const onDataTooLarge = environment === 'dashboards' ? this.onDataTooLarge : noop;
         return (
             <IntlWrapper locale={locale}>
-                <TableTransformation
-                    executionRequest={{
-                        afm: dataSource.getAfm(),
-                        resultSpec: ResultSpecUtils.applySorting(resultSpec, sortItems)
-                    }}
-                    executionResponse={executionResponse.executionResponse}
-                    executionResult={executionResult.executionResult}
-                    afterRender={afterRender}
-                    config={{ stickyHeaderOffset }}
-                    drillableItems={drillableItems}
-                    height={height}
-                    onDataTooLarge={onDataTooLarge}
-                    tableRenderer={tableRenderer}
-                    onFiredDrillEvent={onFiredDrillEvent}
-                />
+                <IntlTranslationsProvider>
+                    {(props: ITranslationsComponentProps) => (
+                        <TableTransformation
+                            executionRequest={{
+                                afm: dataSource.getAfm(),
+                                resultSpec: ResultSpecUtils.applySorting(resultSpec, sortItems)
+                            }}
+                            executionResponse={executionResponse.executionResponse}
+                            executionResult={
+                                fixEmptyHeaderItems(executionResult, props.emptyHeaderString).executionResult
+                            }
+                            afterRender={afterRender}
+                            config={{ stickyHeaderOffset }}
+                            drillableItems={drillableItems}
+                            height={height}
+                            onDataTooLarge={onDataTooLarge}
+                            tableRenderer={tableRenderer}
+                            onFiredDrillEvent={onFiredDrillEvent}
+                        />
+                    )}
+                </IntlTranslationsProvider>
             </IntlWrapper>
         );
     }

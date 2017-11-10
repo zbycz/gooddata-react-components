@@ -7,14 +7,21 @@ export interface ITranslationsProviderProps {
 
 export interface ITranslationsComponentProps {
     numericSymbols: string[];
+    emptyHeaderString: string;
 }
 
 export class TranslationsProvider extends React.Component<ITranslationsProviderProps & InjectedIntlProps, null> {
     public render() {
         const props: ITranslationsComponentProps = {
-            numericSymbols: this.getNumericSymbols()
+            numericSymbols: this.getNumericSymbols(),
+            emptyHeaderString: this.getEmptyHeaderString()
         };
         return this.props.children(props);
+    }
+
+    private getEmptyHeaderString() {
+        const emptyValueTranslation = this.props.intl.formatMessage({ id: 'visualization.emptyValue' });
+        return `(${emptyValueTranslation})`;
     }
 
     private getNumericSymbols() {
