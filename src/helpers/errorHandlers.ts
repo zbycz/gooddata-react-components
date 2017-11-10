@@ -1,20 +1,29 @@
 import { Execution } from '@gooddata/typings';
 import {
-    ErrorCodes,
+    ErrorCodes as DataErrorCodes
 } from '@gooddata/data-layer';
-import { ErrorStates } from '../constants/errorStates';
+import { ErrorStates, ErrorCodes } from '../constants/errorStates';
 
+// TODO tests
 export function convertErrors(error: Execution.IError) {
     const errorCode: number = error.response.status;
 
     switch (errorCode) {
-        // TODO: Add 204 type
         case 204:
             throw ErrorStates.NO_DATA;
-        case ErrorCodes.HTTP_TOO_LARGE:
+
+        case DataErrorCodes.HTTP_TOO_LARGE:
             throw ErrorStates.DATA_TOO_LARGE_TO_COMPUTE;
-        case ErrorCodes.HTTP_BAD_REQUEST:
+
+        case DataErrorCodes.HTTP_BAD_REQUEST:
             throw ErrorStates.BAD_REQUEST;
+
+        case ErrorCodes.EMPTY_AFM:
+            throw ErrorStates.EMPTY_AFM;
+
+        case ErrorCodes.INVALID_BUCKETS:
+            throw ErrorStates.INVALID_BUCKETS;
+
         default:
             throw ErrorStates.UNKNOWN_ERROR;
     }
