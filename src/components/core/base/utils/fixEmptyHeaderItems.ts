@@ -14,7 +14,7 @@ export default function fixEmptyHeaderItems(
                 const type = Object.keys(headerItemWrapper)[0];
 
                 // TODO typescript way is cumbersome?
-                if (['attributeHeaderItem', 'measureHeaderItem', 'totalHeaderItem'].includes(type)) {
+                if (['attributeHeaderItem', 'measureHeaderItem', 'totalHeaderItem'].indexOf(type) >= 0) {
                     headerItemWrapper[type].name = headerItemWrapper[type].name || emptyHeaderString;
                 }
                 return headerItemWrapper;

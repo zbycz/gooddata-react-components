@@ -106,7 +106,7 @@ const oneMeasureResponse: Execution.IExecutionResponses = {
                     1
                 ]
             },
-            attributeHeaderItems: [
+            headerItems: [
                 [],
                 []
             ]
