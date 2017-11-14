@@ -22,13 +22,13 @@ import { oneMeasureResponse, tooLargeResponse } from '../../../execution/fixture
 const oneMeasureDataSource: IDataSource = {
     getData: () => Promise.resolve(oneMeasureResponse),
     getAfm: () => ({}),
-    getFingerprint: () => ('{}')
+    getFingerprint: () => JSON.stringify(oneMeasureResponse)
 };
 
 const tooLargeDataSource: IDataSource = {
     getData: () => Promise.reject(tooLargeResponse),
     getAfm: () => ({}),
-    getFingerprint: () => ('{}')
+    getFingerprint: () => JSON.stringify(tooLargeDataSource)
 };
 
 describe('Table', () => {

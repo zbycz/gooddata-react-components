@@ -17,6 +17,7 @@ import { AFM, Execution } from '@gooddata/typings';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import { IntlTranslationsProvider, ITranslationsComponentProps } from './base/TranslationsProvider';
@@ -106,6 +107,11 @@ export class Table extends React.Component<ITableProps, ITableState> {
         this.subject = new Subject<ITableDataPromise>();
         this.subscription = this.subject
             .switchMap<ITableDataPromise, Execution.IExecutionResponses>(identity)
+            // Streams are closed on error by default so we need this workaround
+            .catch((error, caught) => {
+                this.onError(error); // handle error
+                return caught; // stream continue
+            })
             .subscribe((result) => {
                 this.setState({
                     result
@@ -116,9 +122,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
                     options
                 });
                 this.onLoadingChanged({ isLoading: false });
-            } ,
-            (error: any) => this.onError(error)
-        );
+            });
     }
 
     public componentDidMount() {

@@ -8,6 +8,7 @@ import { DataSourceUtils } from '@gooddata/data-layer';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
 
 import { IntlWrapper } from './IntlWrapper';
 import { IEvents, ILoadingState } from '../../../interfaces/Events';
@@ -108,6 +109,11 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
         this.subject = new Subject<IBaseChartDataPromise>();
         this.subscription = this.subject
             .switchMap<IBaseChartDataPromise, Execution.IExecutionResponses>(identity)
+            // Streams are closed on error by default so we need this workaround
+            .catch((error, caught) => {
+                this.onError(error); // handle error
+                return caught; // stream continue
+            })
             .subscribe((result: Execution.IExecutionResponses) => {
                 this.setState({
                     result
@@ -118,9 +124,7 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
                     options
                 });
                 this.onLoadingChanged({ isLoading: false });
-            } ,
-            (error: any) => this.onError(error)
-        );
+            });
     }
 
     public componentDidMount() {

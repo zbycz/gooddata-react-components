@@ -17,19 +17,19 @@ import {
     badRequestResponse
 } from '../../../../execution/fixtures/ExecuteAfm.fixtures';
 
-function createDataSource(result: Execution.IExecutionResponses, afm: AFM.IAfm = {}): IDataSource {
+function createDataSource(result: Execution.IExecutionResponses): IDataSource {
     return {
         getData: () => Promise.resolve(result),
-        getAfm: jest.fn().mockReturnValue(afm),
-        getFingerprint: jest.fn().mockReturnValue(JSON.stringify(afm))
+        getAfm: () => ({}),
+        getFingerprint: () => JSON.stringify(result)
     };
 }
 
-function createRejectingDataSource(error: Execution.IError, afm: AFM.IAfm = {}): IDataSource {
+function createRejectingDataSource(error: Execution.IError): IDataSource {
     return {
         getData: () => Promise.reject(error),
-        getAfm: jest.fn().mockReturnValue(afm),
-        getFingerprint: jest.fn().mockReturnValue(JSON.stringify(afm))
+        getAfm: () => ({}),
+        getFingerprint: () => JSON.stringify(error)
     };
 }
 
@@ -42,8 +42,7 @@ describe('BaseChart', () => {
         );
     }
 
-    const afm: AFM.IAfm = { measures: [] };
-    const dataSource = createDataSource(oneMeasureResponse, afm);
+    const dataSource = createDataSource(oneMeasureResponse);
     const createProps = (customProps = {}) => {
         const props: IBaseChartProps = {
             height: 200,
@@ -138,7 +137,7 @@ describe('BaseChart', () => {
 
     it('should call onError with DATA_TOO_LARGE_TO_COMPUTE', () => {
         const onError = jest.fn();
-        const tooLargeDataSource = createRejectingDataSource(tooLargeResponse, afm);
+        const tooLargeDataSource = createRejectingDataSource(tooLargeResponse);
         const props = createProps({
             onError,
             dataSource: tooLargeDataSource
@@ -155,9 +154,37 @@ describe('BaseChart', () => {
         });
     });
 
+    it('should be able to restore after rejected datasource', () => {
+        const onError = jest.fn();
+        const pushData = jest.fn();
+        const tooLargeDataSource = createRejectingDataSource(tooLargeResponse);
+        const props = createProps({
+            onError,
+            pushData,
+            dataSource: tooLargeDataSource
+        });
+        const wrapper = createComponent(props);
+
+        return delay().then(() => {
+            expect(wrapper.find(Visualization).length).toBe(0);
+            expect(onError).toHaveBeenCalledTimes(2);
+            expect(onError).toHaveBeenLastCalledWith({
+                status: ErrorStates.DATA_TOO_LARGE_TO_COMPUTE,
+                options: expect.any(Object)
+            });
+
+            wrapper.setProps({
+                dataSource
+            });
+            return delay().then(() => {
+                expect(pushData).toHaveBeenCalledTimes(1);
+            });
+        });
+    });
+
     it('should call onError with BAD_REQUEST', () => {
         const onError = jest.fn();
-        const badRequestDataSource = createRejectingDataSource(badRequestResponse, afm);
+        const badRequestDataSource = createRejectingDataSource(badRequestResponse);
         const props = createProps({
             onError,
             dataSource: badRequestDataSource
@@ -176,7 +203,7 @@ describe('BaseChart', () => {
 
     it('should call onError with NO_DATA', () => {
         const onError = jest.fn();
-        const emptyResultDataSource = createDataSource(emptyResponse, afm);
+        const emptyResultDataSource = createDataSource(emptyResponse);
         const props = createProps({
             onError,
             dataSource: emptyResultDataSource
