@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as GoodData from 'gooddata';
 import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
-import identity = require('lodash/identity');
 import {
     AfmUtils,
     ExecuteAfmAdapter,
@@ -10,8 +9,6 @@ import {
     toAfmResultSpec
 } from '@gooddata/data-layer';
 import { AFM } from '@gooddata/typings';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
 
 import { ErrorStates } from '../../constants/errorStates';
 import { BaseChart, IChartConfig } from '../core/base/BaseChart';
@@ -21,7 +18,7 @@ import { VisualizationPropType, Requireable } from '../../proptypes/Visualizatio
 import { VisualizationTypes, VisType } from '../../constants/visualizationTypes';
 import { IDrillableItem } from '../../interfaces/DrillEvents';
 import { IDataSource } from '../../interfaces/DataSource';
-import { createStream } from '../../helpers/async';
+import { createSubject, ISubject } from '../../helpers/async';
 
 export { Requireable };
 
@@ -111,8 +108,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     private adapter: ExecuteAfmAdapter;
     private dataSource: IDataSource;
 
-    private subscription: Subscription;
-    private subject: Subject<Promise<IVisualizationExecInfo>>;
+    private subject: ISubject<Promise<IVisualizationExecInfo>>;
 
     constructor(props: IVisualizationProps) {
         super(props);
@@ -125,10 +121,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
 
         this.visualizationUri = props.uri;
 
-        const {
-            subject,
-            subscription
-        } = createStream<Promise<IVisualizationExecInfo>, IVisualizationExecInfo>(
+        this.subject = createSubject<Promise<IVisualizationExecInfo>, IVisualizationExecInfo>(
             ({ type, resultSpec, dataSource }) => {
                 this.dataSource = dataSource;
                 this.setState({
@@ -137,8 +130,6 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
                     isLoading: false
                 });
             }, () => props.onError(ErrorStates.NOT_FOUND));
-        this.subject = subject;
-        this.subscription = subscription;
     }
 
     public componentDidMount() {
@@ -155,7 +146,6 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     }
 
     public componentWillUnmount() {
-        this.subscription.unsubscribe();
         this.subject.unsubscribe();
     }
 

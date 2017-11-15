@@ -8,11 +8,8 @@ import {
     ExecuteAfmAdapter
 } from '@gooddata/data-layer';
 
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
-
 import { IDataSource } from '../../interfaces/DataSource';
-import { createStream } from '../../helpers/async';
+import { createSubject, ISubject } from '../../helpers/async';
 
 export interface IDataSourceProviderProps {
     afm: AFM.IAfm;
@@ -48,8 +45,7 @@ export function dataSourceProvider<T>(
         extends React.Component<IDataSourceProviderProps, IDataSourceProviderInjectedProps> {
 
         private adapter: ExecuteAfmAdapter;
-        private subject: Subject<IDataSourceInfoPromise>;
-        private subscription: Subscription;
+        private subject: ISubject<IDataSourceInfoPromise>;
 
         constructor(props: IDataSourceProviderProps) {
             super(props);
@@ -59,16 +55,11 @@ export function dataSourceProvider<T>(
                 resultSpec: null
             };
 
-            const {
-                subject,
-                subscription
-            } = createStream<IDataSourceInfoPromise, IDataSource>((dataSource) => {
+            this.subject = createSubject<IDataSourceInfoPromise, IDataSource>((dataSource) => {
                 this.setState({
                     dataSource
                 });
             }, error => this.handleError(error));
-            this.subject = subject;
-            this.subscription = subscription;
         }
 
         public componentDidMount() {
@@ -93,7 +84,6 @@ export function dataSourceProvider<T>(
         }
 
         public componentWillUnmount() {
-            this.subscription.unsubscribe();
             this.subject.unsubscribe();
         }
 

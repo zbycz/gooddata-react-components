@@ -1,14 +1,9 @@
 import * as React from 'react';
 import noop = require('lodash/noop');
-import identity = require('lodash/identity');
 import { AFM, Execution } from '@gooddata/typings';
 import { Visualization } from '@gooddata/indigo-visualizations';
 
 import { DataSourceUtils } from '@gooddata/data-layer';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
 
 import { IntlWrapper } from './IntlWrapper';
 import { IEvents, ILoadingState } from '../../../interfaces/Events';
@@ -22,7 +17,7 @@ import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
 import { getVisualizationOptions } from '../../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../../helpers/errorHandlers';
 import fixEmptyHeaderItems from './utils/fixEmptyHeaderItems';
-import { createStream } from "../../../helpers/async";
+import { createSubject, ISubject } from '../../../helpers/async';
 
 export interface ILegendConfig {
     enabled?: boolean;
@@ -90,8 +85,7 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
         visualizationComponent: Visualization
     };
 
-    private subject: Subject<IBaseChartDataPromise>;
-    private subscription: Subscription;
+    private subject: ISubject<IBaseChartDataPromise>;
 
     constructor(props: IBaseChartProps) {
         super(props);
@@ -107,10 +101,7 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
         this.onError = this.onError.bind(this);
         this.onNegativeValues = this.onNegativeValues.bind(this);
 
-        const {
-            subject,
-            subscription
-        } = createStream<IBaseChartDataPromise, Execution.IExecutionResponses>((result) => {
+        this.subject = createSubject<IBaseChartDataPromise, Execution.IExecutionResponses>((result) => {
             this.setState({
                 result
             });
@@ -121,8 +112,6 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
             });
             this.onLoadingChanged({ isLoading: false });
         }, error => this.onError(error));
-        this.subject = subject;
-        this.subscription = subscription;
     }
 
     public componentDidMount() {
@@ -138,7 +127,6 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
     }
 
     public componentWillUnmount() {
-        this.subscription.unsubscribe();
         this.subject.unsubscribe();
         this.onLoadingChanged = noop;
         this.onError = noop;

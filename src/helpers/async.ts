@@ -9,23 +9,29 @@ export { Subscription };
 export type StreamSuccessHandler<R> = (result: R) => void;
 export type StreamErrorHandler = (error: any) => void;
 
+export interface ISubject<T> {
+    next: (promise: T) => void;
+    unsubscribe: () => void;
+}
+
 /**
- * Creates infinite stream
  * Ussage:
- * const { subject, subscription } = createStream(
+ * const subject = createSubject(
  *      (result) => console.log('Success:', result),
  *      (error) => console.error('Error:', error)
  * );
  * subject.next(promise1);
  * subject.next(promise2);
  *
- * subscription.unsubscribe();
  * subject.unsubscribe();
  *
  * @param successHandler
  * @param errorHandler
  */
-export function createStream<T, R>(successHandler: StreamSuccessHandler<R>, errorHandler: StreamErrorHandler) {
+export function createSubject<T, R>(
+    successHandler: StreamSuccessHandler<R>,
+    errorHandler: StreamErrorHandler
+): ISubject<T> {
     const subject: Subject<T> = new Subject<T>();
     const subscription = subject
         // This ensures we get last added promise
@@ -38,8 +44,14 @@ export function createStream<T, R>(successHandler: StreamSuccessHandler<R>, erro
         })
         .subscribe(successHandler);
 
-    return {
-        subject, // usage this for subject.next(promise);
-        subscription // needed for cleanup
+    const wrapper: ISubject<T> = {
+        next: (promise: T) => {
+            subject.next(promise);
+        },
+        unsubscribe: () => {
+            subscription.unsubscribe();
+            subject.unsubscribe();
+        }
     };
+    return wrapper;
 }

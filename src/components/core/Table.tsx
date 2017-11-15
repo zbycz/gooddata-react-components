@@ -13,8 +13,6 @@ import {
     ResultSpecUtils
 } from '@gooddata/data-layer';
 import { AFM, Execution } from '@gooddata/typings';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import { IntlTranslationsProvider, ITranslationsComponentProps } from './base/TranslationsProvider';
@@ -28,7 +26,7 @@ import { ErrorStates } from '../../constants/errorStates';
 import { VisualizationEnvironment } from '../uri/Visualization';
 import { getVisualizationOptions } from '../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../helpers/errorHandlers';
-import { createStream } from '../../helpers/async';
+import { createSubject, ISubject } from '../../helpers/async';
 
 export { Requireable };
 
@@ -81,8 +79,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
 
     public static propTypes = TablePropTypes;
 
-    private subject: Subject<ITableDataPromise>;
-    private subscription: Subscription;
+    private subject: ISubject<ITableDataPromise>;
 
     constructor(props: ITableProps) {
         super(props);
@@ -102,10 +99,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
         this.onMore = this.onMore.bind(this);
         this.onLess = this.onLess.bind(this);
 
-        const {
-            subject,
-            subscription
-        } = createStream<ITableDataPromise, Execution.IExecutionResponses>((result) => {
+        this.subject = createSubject<ITableDataPromise, Execution.IExecutionResponses>((result) => {
             this.setState({
                 result
             });
@@ -116,8 +110,6 @@ export class Table extends React.Component<ITableProps, ITableState> {
             });
             this.onLoadingChanged({ isLoading: false });
         }, error => this.onError(error));
-        this.subject = subject;
-        this.subscription = subscription;
     }
 
     public componentDidMount() {
@@ -146,7 +138,6 @@ export class Table extends React.Component<ITableProps, ITableState> {
     }
 
     public componentWillUnmount() {
-        this.subscription.unsubscribe();
         this.subject.unsubscribe();
         this.onLoadingChanged = noop;
         this.onError = noop;
