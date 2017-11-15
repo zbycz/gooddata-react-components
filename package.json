@@ -45,7 +45,7 @@
     "typescript": "2.3.3"
   },
   "dependencies": {
-    "@gooddata/data-layer": "4.0.3-pavelzgdc-new-afm-2017-11-13T13-18-03-574Z",
+    "@gooddata/data-layer": "4.0.3-vojty-new-afm-2017-11-15T12-21-14-785Z",
     "@gooddata/goodstrap": "53.0.1",
     "@gooddata/indigo-visualizations": "0.16.0-tomasreichmann-doc-new-afm-2017-11-13T14-07-11-030Z",
     "@gooddata/js-utils": "0.9.0",

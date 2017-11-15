@@ -15,7 +15,8 @@ export interface ISubject<T> {
 }
 
 /**
- * Ussage:
+ * Creates infinite stream
+ * Usage:
  * const subject = createSubject(
  *      (result) => console.log('Success:', result),
  *      (error) => console.error('Error:', error)

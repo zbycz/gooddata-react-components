@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { AFM, Execution } from '@gooddata/typings';
+import { Execution } from '@gooddata/typings';
 import { delay } from '../../../tests/utils';
 import { IDataSource } from '../../../../interfaces/DataSource';
 import {
