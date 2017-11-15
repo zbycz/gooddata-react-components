@@ -2,7 +2,6 @@ import * as React from 'react';
 import get = require('lodash/get');
 import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
-import identity = require('lodash/identity');
 import {
     ResponsiveTable,
     Table as IndigoTable,
@@ -16,8 +15,6 @@ import {
 import { AFM, Execution } from '@gooddata/typings';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import { IntlTranslationsProvider, ITranslationsComponentProps } from './base/TranslationsProvider';
@@ -31,6 +28,7 @@ import { ErrorStates } from '../../constants/errorStates';
 import { VisualizationEnvironment } from '../uri/Visualization';
 import { getVisualizationOptions } from '../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../helpers/errorHandlers';
+import { createStream } from '../../helpers/async';
 
 export { Requireable };
 
@@ -104,25 +102,22 @@ export class Table extends React.Component<ITableProps, ITableState> {
         this.onMore = this.onMore.bind(this);
         this.onLess = this.onLess.bind(this);
 
-        this.subject = new Subject<ITableDataPromise>();
-        this.subscription = this.subject
-            .switchMap<ITableDataPromise, Execution.IExecutionResponses>(identity)
-            // Streams are closed on error by default so we need this workaround
-            .catch((error, caught) => {
-                this.onError(error); // handle error
-                return caught; // stream continue
-            })
-            .subscribe((result) => {
-                this.setState({
-                    result
-                });
-                const options = getVisualizationOptions(this.props.dataSource.getAfm());
-                this.props.pushData({
-                    result,
-                    options
-                });
-                this.onLoadingChanged({ isLoading: false });
+        const {
+            subject,
+            subscription
+        } = createStream<ITableDataPromise, Execution.IExecutionResponses>((result) => {
+            this.setState({
+                result
             });
+            const options = getVisualizationOptions(this.props.dataSource.getAfm());
+            this.props.pushData({
+                result,
+                options
+            });
+            this.onLoadingChanged({ isLoading: false });
+        }, error => this.onError(error));
+        this.subject = subject;
+        this.subscription = subscription;
     }
 
     public componentDidMount() {

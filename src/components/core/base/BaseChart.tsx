@@ -22,6 +22,7 @@ import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
 import { getVisualizationOptions } from '../../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../../helpers/errorHandlers';
 import fixEmptyHeaderItems from './utils/fixEmptyHeaderItems';
+import { createStream } from "../../../helpers/async";
 
 export interface ILegendConfig {
     enabled?: boolean;
@@ -106,25 +107,22 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
         this.onError = this.onError.bind(this);
         this.onNegativeValues = this.onNegativeValues.bind(this);
 
-        this.subject = new Subject<IBaseChartDataPromise>();
-        this.subscription = this.subject
-            .switchMap<IBaseChartDataPromise, Execution.IExecutionResponses>(identity)
-            // Streams are closed on error by default so we need this workaround
-            .catch((error, caught) => {
-                this.onError(error); // handle error
-                return caught; // stream continue
-            })
-            .subscribe((result: Execution.IExecutionResponses) => {
-                this.setState({
-                    result
-                });
-                const options = getVisualizationOptions(this.props.dataSource.getAfm());
-                this.props.pushData({
-                    result,
-                    options
-                });
-                this.onLoadingChanged({ isLoading: false });
+        const {
+            subject,
+            subscription
+        } = createStream<IBaseChartDataPromise, Execution.IExecutionResponses>((result) => {
+            this.setState({
+                result
             });
+            const options = getVisualizationOptions(this.props.dataSource.getAfm());
+            this.props.pushData({
+                result,
+                options
+            });
+            this.onLoadingChanged({ isLoading: false });
+        }, error => this.onError(error));
+        this.subject = subject;
+        this.subscription = subscription;
     }
 
     public componentDidMount() {

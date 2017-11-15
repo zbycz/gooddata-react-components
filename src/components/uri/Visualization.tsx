@@ -12,7 +12,6 @@ import {
 import { AFM } from '@gooddata/typings';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/switchMap';
 
 import { ErrorStates } from '../../constants/errorStates';
 import { BaseChart, IChartConfig } from '../core/base/BaseChart';
@@ -22,6 +21,7 @@ import { VisualizationPropType, Requireable } from '../../proptypes/Visualizatio
 import { VisualizationTypes, VisType } from '../../constants/visualizationTypes';
 import { IDrillableItem } from '../../interfaces/DrillEvents';
 import { IDataSource } from '../../interfaces/DataSource';
+import { createStream } from '../../helpers/async';
 
 export { Requireable };
 
@@ -125,22 +125,20 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
 
         this.visualizationUri = props.uri;
 
-        const errorHandler = props.onError;
-
-        this.subject = new Subject();
-        this.subscription = this.subject
-            .switchMap<Promise<IVisualizationExecInfo>, IVisualizationExecInfo>(identity)
-            .subscribe(
-                ({ type, resultSpec, dataSource }) => {
-                    this.dataSource = dataSource;
-                    this.setState({
-                        type,
-                        resultSpec,
-                        isLoading: false
-                    });
-                },
-                () => errorHandler(ErrorStates.NOT_FOUND)
-            );
+        const {
+            subject,
+            subscription
+        } = createStream<Promise<IVisualizationExecInfo>, IVisualizationExecInfo>(
+            ({ type, resultSpec, dataSource }) => {
+                this.dataSource = dataSource;
+                this.setState({
+                    type,
+                    resultSpec,
+                    isLoading: false
+                });
+            }, () => props.onError(ErrorStates.NOT_FOUND));
+        this.subject = subject;
+        this.subscription = subscription;
     }
 
     public componentDidMount() {

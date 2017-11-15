@@ -3,7 +3,6 @@ import * as GoodData from 'gooddata';
 
 import isEqual = require('lodash/isEqual');
 import omit = require('lodash/omit');
-import identity = require('lodash/identity');
 import { AFM } from '@gooddata/typings';
 import {
     ExecuteAfmAdapter
@@ -11,9 +10,9 @@ import {
 
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/switchMap';
 
 import { IDataSource } from '../../interfaces/DataSource';
+import { createStream } from '../../helpers/async';
 
 export interface IDataSourceProviderProps {
     afm: AFM.IAfm;
@@ -60,16 +59,16 @@ export function dataSourceProvider<T>(
                 resultSpec: null
             };
 
-            this.subject = new Subject<IDataSourceInfoPromise>();
-            this.subscription = this.subject
-                .switchMap<IDataSourceInfoPromise, IDataSource>(identity)
-                .subscribe((dataSource) => {
-                    this.setState({
-                        dataSource
-                    });
-                } ,
-                (error: any) => this.handleError(error)
-            );
+            const {
+                subject,
+                subscription
+            } = createStream<IDataSourceInfoPromise, IDataSource>((dataSource) => {
+                this.setState({
+                    dataSource
+                });
+            }, error => this.handleError(error));
+            this.subject = subject;
+            this.subscription = subscription;
         }
 
         public componentDidMount() {
