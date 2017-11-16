@@ -45,7 +45,7 @@
     "typescript": "2.3.3"
   },
   "dependencies": {
-    "@gooddata/data-layer": "4.0.3-vojty-new-afm-2017-11-15T12-21-14-785Z",
+    "@gooddata/data-layer": "4.0.3-vojty-new-afm-2017-11-16T08-21-03-585Z",
     "@gooddata/goodstrap": "53.0.1",
     "@gooddata/indigo-visualizations": "0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z",
     "@gooddata/js-utils": "0.9.0",
@@ -55,7 +55,6 @@
     "numeral": "2.0.6",
     "prop-types": "15.6.0",
     "react-intl": "2.2.3",
-    "rxjs": "5.4.3",
     "uuid": "3.0.1"
   },
   "peerDependencies": {

@@ -10,7 +10,8 @@ import {
 import {
     DataSource,
     DataSourceUtils,
-    ResultSpecUtils
+    ResultSpecUtils,
+    createSubject
 } from '@gooddata/data-layer';
 import { AFM, Execution } from '@gooddata/typings';
 
@@ -26,7 +27,7 @@ import { ErrorStates } from '../../constants/errorStates';
 import { VisualizationEnvironment } from '../uri/Visualization';
 import { getVisualizationOptions } from '../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../helpers/errorHandlers';
-import { createSubject, ISubject } from '../../helpers/async';
+import { ISubject } from '../../helpers/async';
 
 export { Requireable };
 
@@ -99,7 +100,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
         this.onMore = this.onMore.bind(this);
         this.onLess = this.onLess.bind(this);
 
-        this.subject = createSubject<ITableDataPromise, Execution.IExecutionResponses>((result) => {
+        this.subject = createSubject<Execution.IExecutionResponses>((result) => {
             this.setState({
                 result
             });

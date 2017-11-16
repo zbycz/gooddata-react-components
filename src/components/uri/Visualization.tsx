@@ -6,7 +6,8 @@ import {
     AfmUtils,
     ExecuteAfmAdapter,
     VisualizationObject,
-    toAfmResultSpec
+    toAfmResultSpec,
+    createSubject
 } from '@gooddata/data-layer';
 import { AFM } from '@gooddata/typings';
 
@@ -18,7 +19,7 @@ import { VisualizationPropType, Requireable } from '../../proptypes/Visualizatio
 import { VisualizationTypes, VisType } from '../../constants/visualizationTypes';
 import { IDrillableItem } from '../../interfaces/DrillEvents';
 import { IDataSource } from '../../interfaces/DataSource';
-import { createSubject, ISubject } from '../../helpers/async';
+import { ISubject } from '../../helpers/async';
 
 export { Requireable };
 
@@ -121,7 +122,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
 
         this.visualizationUri = props.uri;
 
-        this.subject = createSubject<Promise<IVisualizationExecInfo>, IVisualizationExecInfo>(
+        this.subject = createSubject<IVisualizationExecInfo>(
             ({ type, resultSpec, dataSource }) => {
                 this.dataSource = dataSource;
                 this.setState({

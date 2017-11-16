@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 
 export { Subscription };
 
-export type StreamSuccessHandler<R> = (result: R) => void;
+export type StreamSuccessHandler<T> = (result: T) => void;
 export type StreamErrorHandler = (error: any) => void;
 
 export interface ISubject<T> {
@@ -29,14 +29,14 @@ export interface ISubject<T> {
  * @param successHandler
  * @param errorHandler
  */
-export function createSubject<T, R>(
-    successHandler: StreamSuccessHandler<R>,
+export function createSubject<T>(
+    successHandler: StreamSuccessHandler<T>,
     errorHandler: StreamErrorHandler
-): ISubject<T> {
-    const subject: Subject<T> = new Subject<T>();
+): ISubject<Promise<T>> {
+    const subject = new Subject<Promise<T>>();
     const subscription = subject
         // This ensures we get last added promise
-        .switchMap<T, R>(identity)
+        .switchMap<Promise<T>, T>(identity)
 
         // Streams are closed on error by default so we need this workaround
         .catch((error, caught) => {
@@ -45,8 +45,8 @@ export function createSubject<T, R>(
         })
         .subscribe(successHandler);
 
-    const wrapper: ISubject<T> = {
-        next: (promise: T) => {
+    const wrapper: ISubject<Promise<T>> = {
+        next: (promise: Promise<T>) => {
             subject.next(promise);
         },
         unsubscribe: () => {

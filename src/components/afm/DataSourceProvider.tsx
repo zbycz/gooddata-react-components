@@ -5,11 +5,12 @@ import isEqual = require('lodash/isEqual');
 import omit = require('lodash/omit');
 import { AFM } from '@gooddata/typings';
 import {
-    ExecuteAfmAdapter
+    ExecuteAfmAdapter,
+    createSubject
 } from '@gooddata/data-layer';
 
 import { IDataSource } from '../../interfaces/DataSource';
-import { createSubject, ISubject } from '../../helpers/async';
+import { ISubject } from '../../helpers/async';
 
 export interface IDataSourceProviderProps {
     afm: AFM.IAfm;
@@ -55,7 +56,7 @@ export function dataSourceProvider<T>(
                 resultSpec: null
             };
 
-            this.subject = createSubject<IDataSourceInfoPromise, IDataSource>((dataSource) => {
+            this.subject = createSubject<IDataSource>((dataSource) => {
                 this.setState({
                     dataSource
                 });

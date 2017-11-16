@@ -3,7 +3,10 @@ import noop = require('lodash/noop');
 import { AFM, Execution } from '@gooddata/typings';
 import { Visualization } from '@gooddata/indigo-visualizations';
 
-import { DataSourceUtils } from '@gooddata/data-layer';
+import {
+    DataSourceUtils,
+    createSubject
+} from '@gooddata/data-layer';
 
 import { IntlWrapper } from './IntlWrapper';
 import { IEvents, ILoadingState } from '../../../interfaces/Events';
@@ -17,7 +20,7 @@ import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
 import { getVisualizationOptions } from '../../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../../helpers/errorHandlers';
 import fixEmptyHeaderItems from './utils/fixEmptyHeaderItems';
-import { createSubject, ISubject } from '../../../helpers/async';
+import { ISubject } from '../../../helpers/async';
 
 export interface ILegendConfig {
     enabled?: boolean;
@@ -101,7 +104,7 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
         this.onError = this.onError.bind(this);
         this.onNegativeValues = this.onNegativeValues.bind(this);
 
-        this.subject = createSubject<IBaseChartDataPromise, Execution.IExecutionResponses>((result) => {
+        this.subject = createSubject<Execution.IExecutionResponses>((result) => {
             this.setState({
                 result
             });
