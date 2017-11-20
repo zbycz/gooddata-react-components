@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@4.0.3-vojty-new-afm-2017-11-16T08-21-03-585Z":
-  version "4.0.3-vojty-new-afm-2017-11-16T08-21-03-585Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-4.0.3-vojty-new-afm-2017-11-16T08-21-03-585Z.tgz#d69bc3f02dbe657e0f0cc9696e9858a6fd822d8b"
+"@gooddata/data-layer@4.0.3-pavelzgdc-new-afm-2017-11-20T12-23-37-670Z":
+  version "4.0.3-pavelzgdc-new-afm-2017-11-20T12-23-37-670Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-4.0.3-pavelzgdc-new-afm-2017-11-20T12-23-37-670Z.tgz#31d34abc744085038917e3d24247564b44c06084"
   dependencies:
     json-stable-stringify "1.0.1"
     lodash "4.17.4"
@@ -3216,9 +3216,9 @@ globule@^1.0.0:
     lodash "~4.17.4"
     minimatch "~3.0.2"
 
-gooddata@4.3.1-pavelzgdc-pzb-execute-afm-2017-11-13T12-38-52-853Z:
-  version "4.3.1-pavelzgdc-pzb-execute-afm-2017-11-13T12-38-52-853Z"
-  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.3.1-pavelzgdc-pzb-execute-afm-2017-11-13T12-38-52-853Z.tgz#9433d3cad3f0fdfa1c91127982cc3e44a526070e"
+gooddata@4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z:
+  version "4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z"
+  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z.tgz#cbd4499d251784d277acf48e7c647dc070455c98"
   dependencies:
     "@gooddata/typings" "0.0.1"
     es6-promise "3.0.2"
