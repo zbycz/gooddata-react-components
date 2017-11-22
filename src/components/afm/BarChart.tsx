@@ -17,10 +17,10 @@ import { BarChart as coreBarChart } from '../core/BarChart';
 function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     return [
         {
-            itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
+            itemIdentifiers: ['measureGroup']
         },
         {
-            itemIdentifiers: ['measureGroup']
+            itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
         }
     ];
 }

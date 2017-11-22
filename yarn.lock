@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z":
-  version "4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z.tgz#2e9731ba6e452c1c9ccbe54d842798adb62a23f2"
+"@gooddata/data-layer@4.0.3-vojty-new-afm-2017-11-22T15-30-15-051Z":
+  version "4.0.3-vojty-new-afm-2017-11-22T15-30-15-051Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-4.0.3-vojty-new-afm-2017-11-22T15-30-15-051Z.tgz#719832d58435e0d5e41dc63f00d18d7eaafe9418"
   dependencies:
     json-stable-stringify "1.0.1"
     lodash "4.17.4"
@@ -36,9 +36,9 @@
     react-textarea-autosize "4.0.5"
     rxjs "5.4.3"
 
-"@gooddata/indigo-visualizations@0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z":
-  version "0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z.tgz#d10502ea14133c3d8228a42b115fec405f5da8ab"
+"@gooddata/indigo-visualizations@0.16.0-ocetnik-doc-tre-new-afm-2017-11-22T15-34-23-010Z":
+  version "0.16.0-ocetnik-doc-tre-new-afm-2017-11-22T15-34-23-010Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.16.0-ocetnik-doc-tre-new-afm-2017-11-22T15-34-23-010Z.tgz#a69378847bef8ebddc9bd4f4382b79e9afb17c9a"
   dependencies:
     "@gooddata/goodstrap" "53.0.1"
     "@gooddata/js-utils" "0.7.1"

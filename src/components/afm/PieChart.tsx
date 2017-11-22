@@ -16,20 +16,20 @@ function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     if ((afm.attributes || []).length === 0) {
         return [
             {
-                itemIdentifiers: ['measureGroup']
+                itemIdentifiers: []
             },
             {
-                itemIdentifiers: []
+                itemIdentifiers: ['measureGroup']
             }
         ];
     }
 
     return [
         {
-            itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
+            itemIdentifiers: ['measureGroup']
         },
         {
-            itemIdentifiers: ['measureGroup']
+            itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
         }
     ];
 }
