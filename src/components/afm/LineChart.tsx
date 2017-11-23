@@ -9,7 +9,7 @@ export {
 };
 
 import { ICommonChartProps } from '../core/base/BaseChart';
-import { LineChart as coreLineChart } from '../core/LineChart';
+import { LineChart as CoreLineChart } from '../core/LineChart';
 
 function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     return [
@@ -22,4 +22,4 @@ function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     ];
 }
 
-export const LineChart = dataSourceProvider<ICommonChartProps>(coreLineChart, generateDefaultDimensions);
+export const LineChart = dataSourceProvider<ICommonChartProps>(CoreLineChart, generateDefaultDimensions);

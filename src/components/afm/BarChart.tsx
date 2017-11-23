@@ -12,7 +12,7 @@ export {
 };
 
 import { ICommonChartProps } from '../core/base/BaseChart';
-import { BarChart as coreBarChart } from '../core/BarChart';
+import { BarChart as CoreBarChart } from '../core/BarChart';
 
 function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     return [
@@ -25,4 +25,4 @@ function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     ];
 }
 
-export const BarChart = dataSourceProvider<ICommonChartProps>(coreBarChart, generateDefaultDimensions);
+export const BarChart = dataSourceProvider<ICommonChartProps>(CoreBarChart, generateDefaultDimensions);

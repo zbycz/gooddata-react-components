@@ -7,7 +7,6 @@ import {
     IDataSourceProviderInjectedProps
 } from '../DataSourceProvider';
 import { Table } from '../../tests/mocks';
-
 import { delay } from '../../tests/utils';
 
 describe('DataSourceProvider', () => {
@@ -124,6 +123,16 @@ describe('DataSourceProvider', () => {
             return delay().then(() => {
                 expect(wrapper.find(Table).length).toEqual(0);
             });
+        });
+    });
+
+    it('should provide modified resultSpec to InnerComponent', () => {
+        const defaultDimension = () => [{ itemIdentifiers: ['x'] }];
+        const WrappedTable = dataSourceProvider(Table, defaultDimension);
+        const wrapper = mount(<WrappedTable {...defaultProps} />);
+
+        return delay().then(() => {
+            expect(wrapper.find(Table).props().resultSpec.dimensions).toEqual(defaultDimension());
         });
     });
 });

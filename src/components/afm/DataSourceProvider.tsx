@@ -3,19 +3,19 @@ import * as GoodData from 'gooddata';
 
 import isEqual = require('lodash/isEqual');
 import omit = require('lodash/omit');
-import { AFM } from '@gooddata/typings';
-import {
-    ExecuteAfmAdapter,
-    createSubject
-} from '@gooddata/data-layer';
+import { AFM, Execution } from '@gooddata/typings';
+import { ExecuteAfmAdapter, createSubject, IAdapter } from '@gooddata/data-layer';
 
 import { IDataSource } from '../../interfaces/DataSource';
 import { ISubject } from '../../helpers/async';
+
+export type IAdapterFactory = (sdk: typeof GoodData, projectId: string) => IAdapter<Execution.IExecutionResponses>;
 
 export interface IDataSourceProviderProps {
     afm: AFM.IAfm;
     projectId: string;
     resultSpec?: AFM.IResultSpec;
+    adapterFactory?: IAdapterFactory;
 
     [p: string]: any; // other params of inner componnent, just for pass through
 }
@@ -26,26 +26,33 @@ export interface IDataSourceProviderInjectedProps {
 }
 
 export type IDataSourceInfoPromise = Promise<IDataSource>;
+export type IGenerateDefaultDimensionsFunction = (afm: AFM.IAfm) => AFM.IDimension[];
+
+function defaultAdapterFactory(sdk: typeof GoodData, projectId: string): IAdapter<Execution.IExecutionResponses> {
+    return new ExecuteAfmAdapter(sdk, projectId);
+}
+
+function addDefaultDimensions(
+    afm: AFM.IAfm,
+    resultSpec: AFM.IResultSpec,
+    generateDefaultDimensions: IGenerateDefaultDimensionsFunction
+): AFM.IResultSpec {
+    const dimensions = generateDefaultDimensions(afm);
+    return {
+        dimensions,
+        ...resultSpec
+    };
+}
 
 export function dataSourceProvider<T>(
     InnerComponent: React.ComponentClass<T & IDataSourceProviderInjectedProps>,
-    generateDefaultDimensions: Function
+    generateDefaultDimensions: IGenerateDefaultDimensionsFunction
 ): React.ComponentClass<IDataSourceProviderProps> {
-    function addDefaultDimensions(
-        afm: AFM.IAfm,
-        resultSpec: AFM.IResultSpec
-    ): AFM.IResultSpec {
-        const dimensions = generateDefaultDimensions(afm);
-        return {
-            dimensions,
-            ...resultSpec
-        };
-    }
 
     return class WrappedComponent
         extends React.Component<IDataSourceProviderProps, IDataSourceProviderInjectedProps> {
 
-        private adapter: ExecuteAfmAdapter;
+        private adapter: IAdapter<Execution.IExecutionResponses>;
         private subject: ISubject<IDataSourceInfoPromise>;
 
         constructor(props: IDataSourceProviderProps) {
@@ -94,8 +101,12 @@ export function dataSourceProvider<T>(
                 return null;
             }
 
-            const props = omit<any, IDataSourceProviderProps>(this.props, ['afm', 'projectId', 'resultSpec']);
-            const resultSpec = addDefaultDimensions(this.props.afm, this.props.resultSpec);
+            const props = omit<any, IDataSourceProviderProps>(
+                this.props,
+                ['afm', 'projectId', 'resultSpec', 'adapterFactory']
+            );
+            const resultSpec = addDefaultDimensions(this.props.afm, this.props.resultSpec, generateDefaultDimensions);
+
             return (
                 <InnerComponent
                     {...props}
@@ -106,7 +117,8 @@ export function dataSourceProvider<T>(
         }
 
         private createAdapter(projectId: string) {
-            this.adapter = new ExecuteAfmAdapter(GoodData, projectId);
+            const adapterFactory = this.props.adapterFactory || defaultAdapterFactory;
+            this.adapter = adapterFactory(GoodData, projectId);
         }
 
         private handleError(error: string) {
