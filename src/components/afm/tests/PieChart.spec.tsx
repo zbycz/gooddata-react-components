@@ -26,7 +26,7 @@ describe('PieChart', () => {
 
         return delay().then(() => {
             const dimensions = wrapper.find(CorePieChart).props().resultSpec.dimensions;
-            expect(dimensions).toEqual([ { itemIdentifiers: ['measureGroup'] }, { itemIdentifiers: [] } ]);
+            expect(dimensions).toEqual([ { itemIdentifiers: [] }, { itemIdentifiers: ['measureGroup'] } ]);
         });
     });
 
@@ -41,7 +41,7 @@ describe('PieChart', () => {
 
         return delay().then(() => {
             const dimensions = wrapper.find(CorePieChart).props().resultSpec.dimensions;
-            expect(dimensions).toEqual([ { itemIdentifiers: ['a1'] }, { itemIdentifiers: ['measureGroup'] } ]);
+            expect(dimensions).toEqual([ { itemIdentifiers: ['measureGroup'] }, { itemIdentifiers: ['a1'] } ]);
         });
     });
 

@@ -26,7 +26,7 @@ describe('LineChart', () => {
 
         return delay().then(() => {
             const dimensions = wrapper.find(CoreLineChart).props().resultSpec.dimensions;
-            expect(dimensions).toEqual([ { itemIdentifiers: ['a1'] }, { itemIdentifiers: ['measureGroup'] } ]);
+            expect(dimensions).toEqual([ { itemIdentifiers: ['measureGroup'] }, { itemIdentifiers: ['a1'] } ]);
         });
     });
 

@@ -26,7 +26,7 @@ describe('ColumnChart', () => {
 
         return delay().then(() => {
             const dimensions = wrapper.find(CoreColumnChart).props().resultSpec.dimensions;
-            expect(dimensions).toEqual([{itemIdentifiers: ['a1']}, {itemIdentifiers: ['measureGroup']}]);
+            expect(dimensions).toEqual([{itemIdentifiers: ['measureGroup']}, {itemIdentifiers: ['a1']}]);
         });
     });
 
