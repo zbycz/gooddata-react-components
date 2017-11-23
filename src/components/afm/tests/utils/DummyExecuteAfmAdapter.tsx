@@ -6,8 +6,7 @@ import { executionResponses } from './dummyFixture';
 
 export class DummyExecuteAfmAdapter extends ExecuteAfmAdapter {
     public createDataSource(afm: AFM.IAfm, fingerprint?: string): Promise<IDataSource<Execution.IExecutionResponses>> {
-        const execFactory = (resultSpec: AFM.IResultSpec) => {
-
+        const execFactory = () => {
             return Promise.resolve(executionResponses);
         };
         const dataSource = new DataSource.DataSource<Execution.IExecutionResponses>(
