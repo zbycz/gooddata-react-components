@@ -155,29 +155,31 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
             return (
                 <IntlWrapper locale={locale}>
                     <IntlTranslationsProvider>
-                        {(props: ITranslationsComponentProps) => (
-                            <this.props.visualizationComponent
-                                executionRequest={{
-                                    afm: this.props.dataSource.getAfm(),
-                                    resultSpec: this.props.resultSpec
-                                }}
-                                executionResponse={executionResponse.executionResponse}
-                                executionResult={
-                                    fixEmptyHeaderItems(executionResult, props.emptyHeaderString).executionResult
-                                }
-                                height={height}
-                                config={{
-                                    ...config,
-                                    type
-                                }}
-                                afterRender={afterRender}
-                                onDataTooLarge={this.onDataTooLarge}
-                                onNegativeValues={this.onNegativeValues}
-                                drillableItems={this.props.drillableItems}
-                                onFiredDrillEvent={this.props.onFiredDrillEvent}
-                                numericSymbols={props.numericSymbols}
-                            />
-                        )}
+                        {(translationProps: ITranslationsComponentProps) => {
+                            const fixedExecutionResult = fixEmptyHeaderItems(
+                                executionResult,
+                                translationProps.emptyHeaderString
+                            ).executionResult;
+
+                            return (
+                                <this.props.visualizationComponent
+                                    executionRequest={{
+                                        afm: this.props.dataSource.getAfm(),
+                                        resultSpec: this.props.resultSpec
+                                    }}
+                                    executionResponse={executionResponse.executionResponse}
+                                    executionResult={fixedExecutionResult}
+                                    height={height}
+                                    config={{ ...config, type }}
+                                    afterRender={afterRender}
+                                    onDataTooLarge={this.onDataTooLarge}
+                                    onNegativeValues={this.onNegativeValues}
+                                    drillableItems={this.props.drillableItems}
+                                    onFiredDrillEvent={this.props.onFiredDrillEvent}
+                                    numericSymbols={translationProps.numericSymbols}
+                                />
+                            );
+                        }}
                     </IntlTranslationsProvider>
                 </IntlWrapper>
             );

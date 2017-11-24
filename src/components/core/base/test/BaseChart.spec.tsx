@@ -3,10 +3,7 @@ import { mount } from 'enzyme';
 import { Execution } from '@gooddata/typings';
 import { delay } from '../../../tests/utils';
 import { IDataSource } from '../../../../interfaces/DataSource';
-import {
-    Visualization
-} from '../../../tests/mocks';
-
+import { Visualization } from '../../../tests/mocks';
 import { BaseChart, IBaseChartProps } from '../BaseChart';
 import { ErrorStates } from '../../../../constants/errorStates';
 import { VisualizationTypes } from '../../../../constants/visualizationTypes';
@@ -34,14 +31,6 @@ function createRejectingDataSource(error: Execution.IError): IDataSource {
 }
 
 describe('BaseChart', () => {
-    function createComponent(props: IBaseChartProps) {
-        return mount(
-            <BaseChart
-                {...props}
-            />
-        );
-    }
-
     const dataSource = createDataSource(oneMeasureResponse);
     const createProps = (customProps = {}) => {
         const props: IBaseChartProps = {
@@ -54,6 +43,10 @@ describe('BaseChart', () => {
         };
         return props;
     };
+
+    function createComponent(props: IBaseChartProps) {
+        return mount(<BaseChart {...props}/>);
+    }
 
     it('should render a chart', () => {
         const onLoadingChanged = jest.fn();
@@ -221,15 +214,41 @@ describe('BaseChart', () => {
     });
 
     it('should use default onError when is not provided', () => {
-        // TODO
+        const origin = global.console.error;
+        global.console.error = jest.fn();
+
+        const emptyResultDataSource = createDataSource(emptyResponse);
+        const props = createProps({ dataSource: emptyResultDataSource });
+        const wrapper = createComponent(props);
+
+        return delay().then(() => {
+            expect(wrapper.find(Visualization).length).toBe(0);
+            expect(global.console.error).toHaveBeenCalledWith({
+                status: ErrorStates.NO_DATA,
+                options: expect.any(Object)
+            });
+            global.console.error = origin; // TODO still outputs error "{ status: 'NO_DATA..." after this statement
+        });
     });
 
-    it('should reload data when dataSource changed', () => {
-        // TODO
-    });
+    it('should init dataSource and get new result when dataSource change', () => {
+        const dataSource1 = createDataSource(oneMeasureResponse);
+        const dataSource1Init = jest.spyOn(dataSource1, 'getData');
+        const props = createProps({ dataSource: dataSource1 });
+        const wrapper = createComponent(props);
+        expect(dataSource1Init).toHaveBeenCalledTimes(1);
 
-    it('should trigger initDataLoading on props change', () => {
-        // TODO
+        return delay().then(() => {
+            expect(wrapper.state().result).toEqual(oneMeasureResponse);
+
+            const dataSource2 = createDataSource(emptyResponse);
+            const dataSource2Init = jest.spyOn(dataSource2, 'getData');
+            wrapper.setProps({
+                dataSource: dataSource2
+            });
+            expect(wrapper.state().result).toBeNull();
+            expect(dataSource2Init).toHaveBeenCalledTimes(1);
+        });
     });
 
     it('should trigger `onLoadingChanged`', () => {
