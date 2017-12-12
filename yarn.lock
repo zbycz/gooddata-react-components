@@ -3479,11 +3479,11 @@ globule@^1.0.0:
     lodash "~4.17.4"
     minimatch "~3.0.2"
 
-gooddata@4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.4.0.tgz#01f380f32262b3588f9dc92973f8fa2e7a0d5db5"
+gooddata@4.5.0-tomasreichmann-TRE-RAIL-351-Attribute-Elements-2017-12-18T14-16-15-808Z:
+  version "4.5.0-tomasreichmann-TRE-RAIL-351-Attribute-Elements-2017-12-18T14-16-15-808Z"
+  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.5.0-tomasreichmann-TRE-RAIL-351-Attribute-Elements-2017-12-18T14-16-15-808Z.tgz#c8c593090cd91bafbb25bdf48c88195a51bfc523"
   dependencies:
-    "@gooddata/typings" "0.0.3"
+    "@gooddata/typings" "0.0.4"
     es6-promise "3.0.2"
     fetch-cookie "0.4.0"
     invariant "2.2.2"

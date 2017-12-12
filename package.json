@@ -14,6 +14,7 @@
   ],
   "devDependencies": {
     "@gooddata/mock-js": "0.2.0",
+    "@gooddata/test-storybook": "1.0.0",
     "@gooddata/typings": "0.0.4",
     "@storybook/addon-options": "3.2.6",
     "@storybook/react": "3.2.6",
@@ -49,9 +50,8 @@
     "@gooddata/indigo-visualizations": "1.0.1",
     "@gooddata/js-utils": "0.9.0",
     "@gooddata/numberjs": "3.1.0",
-    "@gooddata/test-storybook": "1.0.0",
     "classnames": "2.2.5",
-    "gooddata": "4.4.0",
+    "gooddata": "4.5.0-tomasreichmann-TRE-RAIL-351-Attribute-Elements-2017-12-18T14-16-15-808Z",
     "lodash": "4.17.4",
     "prop-types": "15.6.0",
     "react-intl": "2.2.3"
@@ -67,8 +67,8 @@
     "prepublish": "rm -rf dist && tsc && cp -rf src/translations/ dist/translations/ && yarn build-css",
     "tslint": "./node_modules/tslint/bin/tslint --type-check --project tsconfig.base.json --config tslint.json --format verbose './{src,stories}/**/*.{ts,tsx}'",
     "tslint-ci": "mkdir -p ./ci/results && ./node_modules/tslint/bin/tslint --config tslint.json --format checkstyle --out ./ci/results/tslint-results.xml './{src,stories}/**/*.{ts,tsx}'",
-    "validate": "tsc -p tsconfig.base.json --noEmit && yarn tslint",
-    "validate-ci": "tsc -p tsconfig.base.json --noEmit && yarn tslint-ci",
+    "validate": "./node_modules/typescript/bin/tsc -p tsconfig.base.json --noEmit && yarn tslint",
+    "validate-ci": "./node_modules/typescript/bin/tsc -p tsconfig.base.json --noEmit && yarn tslint-ci",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook -c .storybook -o dist-storybook",
     "test-storybook": "test-storybook"
