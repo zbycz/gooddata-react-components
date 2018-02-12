@@ -20,7 +20,7 @@
     "catalog": "yarn catalog-secure && yarn catalog-staging2 && yarn catalog-staging3 && yarn catalog-client-demo-be",
     "dev": "yarn dev-secure",
     "validate": "eslint src/ --ext .jsx,.js src/",
-    "testcafe": "testcafe chrome:headless --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*",
+    "testcafe": "testcafe firefox --assertion-timeout 5000 --debug-on-fail -S -s _screenshots test/**/**/*_test*",
     "testcafe-ci": "testcafe chromium --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*",
     "testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*"
   },

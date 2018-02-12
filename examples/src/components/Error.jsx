@@ -23,8 +23,7 @@ export const Error = ({ error }) => (
             }}
         >
             <div className="gd-message-text">
-                <strong>{error.status}</strong>
-                { error.message ? <div>{error.message}</div> : null }
+                <strong>{JSON.stringify(error)}</strong>
             </div>
         </div>
     </div>
