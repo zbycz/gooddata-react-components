@@ -1,7 +1,9 @@
+import { existsSync, readFileSync } from 'fs';
+import * as path from 'path';
 import program from 'commander';
 import invariant from 'invariant';
 
-const DEFAULT_CONFIG_FILE_NAME = '../.testcaferc.json';
+const DEFAULT_CONFIG_FILE_NAME = '.testcaferc.json';
 const DEFAULT_HOSTNAME = 'https://localhost:8999';
 
 export const definedOptions = [
@@ -46,14 +48,20 @@ const configDefaults = definedOptions.filter(definedOption => definedOption.defa
 }), {});
 
 // get options from local confif if it exists
-const configFilename = program.config || DEFAULT_CONFIG_FILE_NAME;
-
+const configPath = path.join(process.cwd(), program.config || DEFAULT_CONFIG_FILE_NAME);
 let localConfig = {};
-try {
-    localConfig = require(configFilename); // eslint-disable-line import/no-dynamic-require
-} catch (error) {
-    console.log(`No config file found at ${configFilename}`, error);
+const configExists = existsSync(configPath);
+
+if (configExists) {
+    try {
+        localConfig = JSON.parse(readFileSync(configPath));
+    } catch (error) {
+        console.log('JSON parse error', error);
+    }
+} else {
+    console.log(`No config file found at ${configPath}`);
 }
+
 
 // get options from params
 const paramOptions = definedOptionKeys.reduce((setOptions, key) => (
@@ -74,7 +82,7 @@ requiredOptionKeys.map(
     (requiredKey) => {
         const { key, param, defaultValue } = definedOptions.find(definedOption => definedOption.key === requiredKey);
         const defaultText = defaultValue ? ` Default: ${defaultValue}` : '';
-        return invariant(config[requiredKey] !== undefined, `${key} is missing in config. Pass it with -- ${param} or { "${key}": "${key}" } in ${DEFAULT_CONFIG_FILE_NAME}${defaultText}`);
+        return invariant(config[requiredKey] !== undefined, `${key} is missing in config. Pass it with -- ${param} or { "${key}": "${key}" } in ${DEFAULT_CONFIG_FILE_NAME.substr(3)}${defaultText}`);
     }
 );
 
