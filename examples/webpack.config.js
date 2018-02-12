@@ -13,6 +13,7 @@ module.exports = ({ gdc = 'https://secure.gooddata.com', link = false } = {}) =>
         '/gdc': {
             target: gdc,
             secure: false,
+            cookieDomainRewrite: '',
             onProxyReq: (proxyReq) => {
                 // Browers may send Origin headers even with same-origin
                 // requests. To prevent CORS issues, we have to change
@@ -31,24 +32,24 @@ module.exports = ({ gdc = 'https://secure.gooddata.com', link = false } = {}) =>
         // This is only needed for localhost:####/account.html to work
         '/packages': {
             changeOrigin: true,
-            cookieDomainRewrite: 'localhost',
+            cookieDomainRewrite: '',
             target: gdc,
             secure: false
         },
         '/lib': {
             changeOrigin: true,
-            cookieDomainRewrite: 'localhost',
+            cookieDomainRewrite: '',
             target: gdc,
             secure: false
         },
         '/images': {
             changeOrigin: true,
-            cookieDomainRewrite: 'localhost',
+            cookieDomainRewrite: '',
             target: gdc,
             secure: false
         },
         '/*.html': {
-            cookieDomainRewrite: 'localhost',
+            cookieDomainRewrite: '',
             changeOrigin: true,
             secure: false,
             target: gdc
