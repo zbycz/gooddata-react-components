@@ -28,19 +28,19 @@ export class App extends React.Component {
 
     isUserLoggedIn() {
         this.setState({
-            isLoggedIn: null,
+            isLoggedIn: true,
             errorMessage: null
         });
-        return GD.user.isLoggedIn()
-            .then((isLoggedIn) => {
-                this.setState({ isLoggedIn, errorMessage: null });
-                if (!isLoggedIn && typeof window !== 'undefined') {
-                    window.location.href = '/account.html';
-                }
-            })
-            .catch((errorMessage) => {
-                this.setState({ errorMessage });
-            });
+        // return GD.user.isLoggedIn()
+        //     .then((isLoggedIn) => {
+        //         this.setState({ isLoggedIn, errorMessage: null });
+        //         if (!isLoggedIn && typeof window !== 'undefined') {
+        //             window.location.href = '/account.html';
+        //         }
+        //     })
+        //     .catch((errorMessage) => {
+        //         this.setState({ errorMessage });
+        //     });
     }
 
     render() {

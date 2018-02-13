@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AfmComponents } from '@gooddata/react-components';
+import { factory } from 'gooddata';
 
 import '@gooddata/react-components/styles/css/main.css';
 
@@ -21,41 +22,20 @@ export class BarChartExample extends Component {
     }
 
     render() {
-        const afm = {
-            measures: [
-                {
-                    localIdentifier: 'amount',
-                    definition: {
-                        measure: {
-                            item: {
-                                identifier: totalSalesIdentifier
-                            },
-                            aggregation: 'sum'
-                        }
-                    },
-                    alias: '$ Total Sales',
-                    format: '#,##0'
-                }
-            ],
-            attributes: [
-                {
-                    displayForm: {
-                        identifier: locationResortIdentifier
-                    },
-                    localIdentifier: 'location_resort'
-                }
-            ]
-        };
+        const afm = {"afm":{"measures":[{"localIdentifier":"4849aaca-2524-464c-8744-155e87aa19a6","definition":{"measure":{"item":{"uri":"/gdc/md/GoodSalesDemo/obj/23918"}}},"alias":"# Deals off Pace"}]},"resultSpec":{"dimensions":[{"itemIdentifiers":["measureGroup"]},{"itemIdentifiers":[]}]}};
+
+        const sdk = factory('https://giraffes.intgdc.com');
 
         return (
             <div style={{ height: 300 }} className="s-bar-chart">
                 <BarChart
-                    projectId={projectId}
-                    afm={afm}
+                    projectId={"GoodSalesDemo"}
+                    afm={afm.afm}
                     onLoadingChanged={this.onLoadingChanged}
                     onError={this.onError}
                     LoadingComponent={Loading}
                     ErrorComponent={Error}
+                    sdk={sdk}
                 />
             </div>
         );

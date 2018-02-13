@@ -25,14 +25,14 @@ export const BasicComponents = props => (<Layout {...props} >
     <h2>Column chart</h2>
     <ExampleWithSource for={ColumnChartExample} source={ColumnChartExampleSRC} />
 
-    <h2>Line chart</h2>
-    <ExampleWithSource for={LineChartExample} source={LineChartExampleSRC} />
+    {/*<h2>Line chart</h2>*/}
+    {/*<ExampleWithSource for={LineChartExample} source={LineChartExampleSRC} />*/}
 
-    <h2>Pie chart</h2>
-    <ExampleWithSource for={PieChartExample} source={PieChartExampleSRC} />
+    {/*<h2>Pie chart</h2>*/}
+    {/*<ExampleWithSource for={PieChartExample} source={PieChartExampleSRC} />*/}
 
-    <h2>Table</h2>
-    <ExampleWithSource for={TableExample} source={TableExampleSRC} />
+    {/*<h2>Table</h2>*/}
+    {/*<ExampleWithSource for={TableExample} source={TableExampleSRC} />*/}
 
 </Layout>);
 

@@ -47,7 +47,6 @@
     "eslint-plugin-react": "7.5.1",
     "eslint-stats": "1.0.0",
     "file-loader": "1.1.6",
-    "gdc-catalog-export": "2.1.0",
     "html-webpack-plugin": "2.30.1",
     "invariant": "2.2.2",
     "moment": "2.20.1",
@@ -62,8 +61,7 @@
   },
   "dependencies": {
     "@gooddata/goodstrap": "53.1.2",
-    "@gooddata/react-components": "3.0.10",
-    "gooddata": "4.5.1",
+    "@gooddata/react-components": "3.0.12-vojty-factory-2018-02-13T12-47-41-397Z",
     "prop-types": "15.6.0",
     "react": "15.3.2",
     "react-code-toggle": "0.1.1",
