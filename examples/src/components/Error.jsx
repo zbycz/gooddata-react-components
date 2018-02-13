@@ -5,14 +5,16 @@ import PropTypes from 'prop-types';
 import '@gooddata/react-components/styles/css/main.css';
 
 export const Error = ({ error }) => (
-    <div style={{
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignContent: 'center',
-        justifyContent: 'center',
-        height: '100%'
-    }}
+    <div
+        className="s-error"
+        style={{
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignContent: 'center',
+            justifyContent: 'center',
+            height: '100%'
+        }}
     >
         <div
             className="gd-message error"

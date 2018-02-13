@@ -120,10 +120,10 @@ module.exports = ({ gdc = 'https://secure.gooddata.com', link = false } = {}) =>
             port: 8999,
             proxy,
             headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-                "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
-                "Access-Control-Allow-Credentials": "true"
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+                'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+                'Access-Control-Allow-Credentials': 'true'
             }
         }
     });

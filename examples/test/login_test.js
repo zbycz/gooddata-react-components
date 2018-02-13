@@ -1,16 +1,17 @@
-import { ClientFunction, Selector, Role } from 'testcafe';
-import { config } from '../config';
+import { ClientFunction } from 'testcafe';
+import { config } from './utils/config';
 
 const getPageUrl = ClientFunction(() => window.location.href.toString());
 
-fixture('Login')
+fixture('Login') // eslint-disable-line no-undef
     .page(config.hostname);
 
-test('Redirect to login page', async (t) => {
+test('should redirect to login page', async (t) => {
     await t
         .expect(getPageUrl()).contains(`${config.hostname}/account.html`, { timeout: 10000 })
         .typeText('input[name=email]', config.username)
         .typeText('input[name=password]', config.password)
         .click('button.submit-button')
-        .expect(getPageUrl()).contains(config.hostname, { timeout: 10000 });
+        .expect(getPageUrl())
+        .eql(`${config.hostname}/`, { timeout: 10000 });
 });

@@ -56,10 +56,10 @@ if (configExists) {
     try {
         localConfig = JSON.parse(readFileSync(configPath));
     } catch (error) {
-        console.log('JSON parse error', error);
+        console.log('JSON parse error', error); // eslint-disable-line no-console
     }
 } else {
-    console.log(`No config file found at ${configPath}`);
+    console.log(`No config file found at ${configPath}`); // eslint-disable-line no-console
 }
 
 
